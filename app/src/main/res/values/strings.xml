@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Book Inventory</string>
+
+    <!-- CatalogActivity TextView header -->
+    <string name="header_text_view_one">The books table contains&#160;</string>
+    <string name="header_text_view_two">&#160;books.\n\n</string>
+
+    <!-- CatalogActivity menu options -->
+    <string name="insert_dummy_data">Insert Dummy Data</string>
+    <string name="delete_all_books">Delete All Books</string>
+
+    <!-- Dummy data Strings -->
+    <string name="dummy_data_book_name">Gone With the Wind</string>
+    <string name="dummy_data_supplier_name">Scribner</string>
+
+    <!-- EditActivity app bar title -->
+    <string name="edit_activity_title">Add a Book</string>
+
+    <!-- EditActivity TextViews -->
+    <string name="edit_book_details_title">Book Details</string>
+    <string name="edit_supplier_details_title">Supplier Details</string>
+
+    <!-- EditText hints -->
+    <string name="book_name_hint">Name</string>
+    <string name="book_price_hint">Price</string>
+    <string name="book_quantity_hint">Quantity</string>
+    <string name="supplier_name_hint">Name</string>
+    <string name="supplier_phone_hint">Phone Number</string>
+
+    <!-- EditActivity menu options -->
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+
+    <!-- Toast messages -->
+    <string name="edit_error_message">Error saving book entry</string>
+    <string name="edit_success_message">Book saved with row id:&#160;</string>
+</resources>
