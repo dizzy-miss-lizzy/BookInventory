@@ -27,10 +27,11 @@ public class BookDbHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + BookEntry.TABLE_NAME + " (" +
                     BookEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     BookEntry.COLUMN_BOOK_NAME + " TEXT NOT NULL," +
-                    BookEntry.COLUMN_BOOK_PRICE + " INTEGER NOT NULL," +
-                    BookEntry.COLUMN_BOOK_QUANTITY + " INTEGER NOT NULL," +
+                    BookEntry.COLUMN_BOOK_AUTHOR + " TEXT NOT NULL," +
+                    BookEntry.COLUMN_BOOK_PRICE + " DOUBLE NOT NULL," +
+                    BookEntry.COLUMN_BOOK_QUANTITY + " INTEGER NOT NULL DEFAULT 1," +
                     BookEntry.COLUMN_BOOK_SUPPLIER_NAME + " TEXT NOT NULL," +
-                    BookEntry.COLUMN_BOOK_SUPPLIER_PHONE + " INTEGER NOT NULL)";
+                    BookEntry.COLUMN_BOOK_SUPPLIER_PHONE + " LONG NOT NULL)";
 
     /** String containing the SQL statement to delete the table **/
     private static final String SQL_DELETE_BOOKS_TABLE =

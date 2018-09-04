@@ -1,23 +1,41 @@
 # Book Inventory
 
-Stage 1 of the book inventory app.
+An inventory app for a library or bookstore.
+
+![Screenshot](BookInventory.png)
 
 * Built for API 15 or higher
 * Two activities: CatalogActivity and EditActivity
-* Uses SQLite
+* Uses SQLite to store data
 
 ## Basic structure:
 
-A TextView displays a header showing the number of rows in the database.
+Empty state is displayed upon startup, telling the user to add books.
 
-The user can click on the floating action button to open the EditActivity.
+The user can click the floating action button to open the EditActivity.
 
-EditText fields take input such as name, price, quantity, supplier name, and supplier phone number.
+EditText fields take input for name, author, price, quantity, supplier name, and supplier phone number.
 
-Data is appended to the TextView whether it is manually input by the user or the "Insert Dummy Data" menu option is selected.
+Input is added to the RecyclerView in the CatalogActivity.
 
 Contract and SQLiteOpenHelper files provide the schema and methods containing SQL statements.
 
-## Reference:
+## Additions for Stage 2 project:
+
+A Sale button for each RecyclerView item to decrease the quantity by 1.
+
+ExpandableLayout, when clicked, displays the details of an item, as well as the Order, Edit and Delete buttons.
+
+Order button sends an implicit intent to the phone app.
+
+Quantity buttons (-/+) are added to EditActivity only when editing an existing item.
+
+Dialog messages display whenever the user wants to delete or discard an item.
+
+## References:
 
 https://developer.android.com/training/data-storage/sqlite
+
+ExpandableLayout: https://github.com/SilenceDut/ExpandableLayout
+
+Material icons: https://material.io/tools/icons/?style=baseline

@@ -1,39 +1,64 @@
 package com.example.android.inventoryapp;
 
+import android.app.AlertDialog;
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.inventoryapp.data.BookContract.BookEntry;
-import com.example.android.inventoryapp.data.BookDbHelper;
+
+import static com.example.android.inventoryapp.data.BookContract.BookEntry.CONTENT_URI;
 
 /**
  * Main screen of the app that displays a list of books that are entered by the user
- * and then stored in the database. Information includes name, price, quantity, and
+ * and then stored in the database. Information includes name, author, price, quantity,
  * supplier name and phone number.
  *
  * References: Udacity's Pets app and Android documentation: https://developer.android.com/training/data-storage/sqlite
+ * Material icons: https://material.io/tools/icons/?style=baseline
  */
-public class CatalogActivity extends AppCompatActivity {
+public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    /** Log messages tag **/
     public static final String LOG_TAG = CatalogActivity.class.getName();
 
-    /** Database helper that provides access to the database **/
-    private BookDbHelper mDbHelper;
+    /** Adapter for the list of books **/
+    BookCursorAdapter mCursorAdapter;
+
+    /** Static value for the book loader ID **/
+    private static final int BOOK_LOADER = 0;
+
+    /** RecyclerView for inventory list **/
+    RecyclerView recyclerView;
+
+    /** TextView and ImageView for Empty State **/
+    TextView emptyView;
+    ImageView emptyViewImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
+
+        // Finds Empty State views and RecyclerView
+        emptyView = (TextView) findViewById(R.id.empty_view);
+        emptyViewImage = (ImageView) findViewById(R.id.empty_view_image);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         // Finds the floating action button and sets an OnClickListener()
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -46,115 +71,59 @@ public class CatalogActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        // Instantiates the database helper and passes the activity context
-        mDbHelper = new BookDbHelper(this);
+        setUpRecyclerView();
+        getLoaderManager().initLoader(BOOK_LOADER, null, this);
     }
 
     /**
-     * Called when the user has input data from {@link EditActivity} and adds it to the list.
+     * Checks whether or not the adapter contains items and sets the Empty State accordingly
+     * Reference: http://www.tutorialforandroid.com/2014/09/recyclerview-setemptyview.html
      */
-    @Override
-    protected void onStart() {
-        Log.i(LOG_TAG, "Calls onStart()");
-        super.onStart();
-        queryData();
-    }
-
-    /**
-     * Cursor method that reads information from the database and displays it in a TextView.
-     */
-    private Cursor queryData() {
-        Log.i(LOG_TAG, "Calls queryData()");
-        // Creates a database or reads from one already created
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
-        // Defines a projection with the constant values used in the query
-        String[] projection = {
-                BookEntry._ID,
-                BookEntry.COLUMN_BOOK_NAME,
-                BookEntry.COLUMN_BOOK_PRICE,
-                BookEntry.COLUMN_BOOK_QUANTITY,
-                BookEntry.COLUMN_BOOK_SUPPLIER_NAME,
-                BookEntry.COLUMN_BOOK_SUPPLIER_PHONE };
-
-        // Performs the query
-        Cursor cursor = db.query(
-                BookEntry.TABLE_NAME,  // Table to query
-                projection,            // Columns to return, including all from the books table
-                null,                  // Columns for the WHERE clause
-                null,                  // Values for the WHERE clause
-                null,                  // Doesn't group the rows
-                null,                  // Doesn't filter by row groups
-                null);                 // Doesn't specify sort order
-
-        // Finds TextView to display data to screen
-        TextView displayInfo = (TextView) findViewById(R.id.book_text_view);
-
-        try {
-            // Creates a header:
-            //
-            // The books table contains <row number in Cursor> books.
-            // _id - name - price - quantity - supplier_name - supplier_phone
-            assert displayInfo != null;
-            displayInfo.setText(getString(R.string.header_text_view_one) + cursor.getCount() + getString(R.string.header_text_view_two));
-            displayInfo.append(BookEntry._ID + " - " +
-                    BookEntry.COLUMN_BOOK_NAME + " - " +
-                    BookEntry.COLUMN_BOOK_PRICE + " - " +
-                    BookEntry.COLUMN_BOOK_QUANTITY + " - " +
-                    BookEntry.COLUMN_BOOK_SUPPLIER_NAME + " - " +
-                    BookEntry.COLUMN_BOOK_SUPPLIER_PHONE + "\n");
-
-            // Gets the index of each column
-            int idColumnIndex = cursor.getColumnIndex(BookEntry._ID);
-            int nameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_NAME);
-            int priceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_PRICE);
-            int quantityColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_QUANTITY);
-            int supplierNameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_SUPPLIER_NAME);
-            int supplierPhoneColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_SUPPLIER_PHONE);
-
-            // Moves through every row and returns data in cursor
-            while (cursor.moveToNext()) {
-                Log.i(LOG_TAG, "While loop is executed.");
-                // Uses the column index to extract the String and int values for the current row
-                int currentID = cursor.getInt(idColumnIndex);
-                String currentName = cursor.getString(nameColumnIndex);
-                int currentPrice = cursor.getInt(priceColumnIndex);
-                int currentQuantity = cursor.getInt(quantityColumnIndex);
-                String currentSupplierName = cursor.getString(supplierNameColumnIndex);
-                int currentSupplierPhone = cursor.getInt(supplierPhoneColumnIndex);
-
-                // Appends the values of the current row to the TextView
-                displayInfo.append("\n" + currentID + " - " +
-                        currentName + " - " + "$" + currentPrice + " - " +
-                        currentQuantity + " - " + currentSupplierName + " - " + currentSupplierPhone);
-            }
-        } finally {
-            // Closes the cursor when finished reading from it.
-            Log.i(LOG_TAG, "Cursor is closed.");
-            cursor.close();
+    private void checkAdapterIsEmpty() {
+        if (mCursorAdapter.getItemCount() == 0) {
+            emptyViewImage.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.VISIBLE);
+        } else {
+            emptyViewImage.setVisibility(View.GONE);
+            emptyView.setVisibility(View.GONE);
         }
-        return cursor;
+    }
+
+    /**
+     * Sets up the Adapter and checks if it is empty.
+     * If not, the RecyclerView is set on the Adapter.
+     */
+    protected void setUpRecyclerView() {
+        mCursorAdapter = new BookCursorAdapter(this, null);
+        mCursorAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                checkAdapterIsEmpty();
+            }
+        });
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(mCursorAdapter);
+        checkAdapterIsEmpty();
     }
 
     /**
      * Helper method used for debugging by inserting dummy data into the database.
      */
     private void insertBook() {
-        Log.i(LOG_TAG, "Calls insertBook()");
-        // Gets the database in writable mode
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-
         // Creates a ContentValues object and sets the column keys to hardcoded values
         ContentValues values = new ContentValues();
         values.put(BookEntry.COLUMN_BOOK_NAME, getString(R.string.dummy_data_book_name));
-        values.put(BookEntry.COLUMN_BOOK_PRICE, 10);
+        values.put(BookEntry.COLUMN_BOOK_AUTHOR, getString(R.string.dummy_data_author));
+        values.put(BookEntry.COLUMN_BOOK_PRICE, 10.99);
         values.put(BookEntry.COLUMN_BOOK_QUANTITY, 20);
         values.put(BookEntry.COLUMN_BOOK_SUPPLIER_NAME, getString(R.string.dummy_data_supplier_name));
-        values.put(BookEntry.COLUMN_BOOK_SUPPLIER_PHONE, 5557777);
+        values.put(BookEntry.COLUMN_BOOK_SUPPLIER_PHONE, 2100601414);
 
-        // Inserts a new row for the dummy data
-        long newRowId = db.insert(BookEntry.TABLE_NAME, null, values);
+        // Inserts a new row for the dummy data and notifies the RecyclerView
+        getContentResolver().insert(CONTENT_URI, values);
+        recyclerView.getAdapter().notifyDataSetChanged();
     }
 
     /**
@@ -172,15 +141,88 @@ public class CatalogActivity extends AppCompatActivity {
     @Override
     public  boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            // Inserts the dummy data and displays it in the TextView
             case R.id.insert_dummy_data:
+                // Inserts the dummy data and sets the Empty State to gone
                 insertBook();
-                queryData();
+                emptyView.setVisibility(View.GONE);
+                emptyViewImage.setVisibility(View.GONE);
                 return true;
-            // Deletes all entries. Currently, does nothing
             case R.id.delete_all_entries:
+                // Calls the dialog message to delete all entries
+                showDeleteConfirmationDialog();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Dialog message that displays "Delete all books?"
+     * and "Delete" or "Cancel" buttons
+     */
+    private void showDeleteConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.delete_all_dialog_msg);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteAllBooks();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    /**
+     * Handles deleting all books when the "Delete" button in the dialog message is clicked.
+     */
+    private void deleteAllBooks() {
+        int rowsDeleted = getContentResolver().delete(BookEntry.CONTENT_URI, null, null);
+        Log.v(LOG_TAG, rowsDeleted + " rows deleted from the books database.");
+    }
+
+    /**
+     * Creates a loader that declares a projection taking input from all database table columns.
+     */
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] projection = {
+                BookEntry._ID,
+                BookEntry.COLUMN_BOOK_NAME,
+                BookEntry.COLUMN_BOOK_AUTHOR,
+                BookEntry.COLUMN_BOOK_PRICE,
+                BookEntry.COLUMN_BOOK_QUANTITY,
+                BookEntry.COLUMN_BOOK_SUPPLIER_NAME,
+                BookEntry.COLUMN_BOOK_SUPPLIER_PHONE };
+
+        return new CursorLoader(this,  // Activity context
+                BookEntry.CONTENT_URI, // URI to query
+                projection,            // Columns to return
+                null,                  // No selection
+                null,                  // No selection arguments
+                null);                 // No defined sort order
+    }
+
+    /**
+     * Updates the cursor adapter with new book data.
+     */
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mCursorAdapter.swapCursor(data);
+    }
+
+    /**
+     * Clears the cursor of data if the loader is reset.
+     */
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mCursorAdapter.swapCursor(null);
     }
 }

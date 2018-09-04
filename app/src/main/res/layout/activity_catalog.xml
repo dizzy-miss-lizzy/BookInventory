@@ -5,19 +5,38 @@
     android:layout_height="match_parent"
     tools:context="com.example.android.inventoryapp.CatalogActivity">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <TextView
-        android:id="@+id/book_text_view"
+        android:id="@+id/empty_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/activity_margin" />
+        android:layout_centerInParent="true"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/empty_state_text"
+        android:textAlignment="center"
+        android:textAppearance="?android:textAppearanceMedium" />
+
+    <ImageView
+        android:contentDescription="@string/empty_state_image_description"
+        android:id="@+id/empty_view_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/empty_view"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="@dimen/margin_eight"
+        android:src="@drawable/baseline_local_library_black_48" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_add_24dp" />
 </RelativeLayout>

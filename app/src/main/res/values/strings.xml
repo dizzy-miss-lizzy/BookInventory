@@ -1,10 +1,6 @@
 <resources>
     <string name="app_name">Book Inventory</string>
 
-    <!-- CatalogActivity TextView header -->
-    <string name="header_text_view_one">The books table contains&#160;</string>
-    <string name="header_text_view_two">&#160;books.\n\n</string>
-
     <!-- CatalogActivity menu options -->
     <string name="insert_dummy_data">Insert Dummy Data</string>
     <string name="delete_all_books">Delete All Books</string>
@@ -12,16 +8,32 @@
     <!-- Dummy data Strings -->
     <string name="dummy_data_book_name">Gone With the Wind</string>
     <string name="dummy_data_supplier_name">Scribner</string>
+    <string name="dummy_data_author">Margaret Mitchell</string>
+
+    <!-- Image descriptions -->
+    <string name="drop_down_arrow_description">Drop down or up arrow</string>
+    <string name="empty_state_image_description">Library icon</string>
+
+    <!-- RecyclerView item buttons -->
+    <string name="sale_button">Sale</string>
+    <string name="order_button">Order</string>
+    <string name="edit_button">Edit</string>
 
     <!-- EditActivity app bar title -->
-    <string name="edit_activity_title">Add a Book</string>
+    <string name="add_activity_title">Add a Book</string>
+    <string name="edit_activity_title">Edit Book</string>
 
-    <!-- EditActivity TextViews -->
+    <!-- EditActivity TextView headers and symbols -->
     <string name="edit_book_details_title">Book Details</string>
     <string name="edit_supplier_details_title">Supplier Details</string>
+    <string name="dollar_sign">$</string>
+    <string name="decrease_quantity">-</string>
+    <string name="increase_quantity">+</string>
+    <string name="stock_text_view">in stock</string>
 
     <!-- EditText hints -->
     <string name="book_name_hint">Name</string>
+    <string name="book_author_hint">Author</string>
     <string name="book_price_hint">Price</string>
     <string name="book_quantity_hint">Quantity</string>
     <string name="supplier_name_hint">Name</string>
@@ -31,7 +43,32 @@
     <string name="save">Save</string>
     <string name="delete">Delete</string>
 
-    <!-- Toast messages -->
-    <string name="edit_error_message">Error saving book entry</string>
-    <string name="edit_success_message">Book saved with row id:&#160;</string>
+    <!-- EditActivity Error/Success Toast messages -->
+    <string name="add_error_msg">Error saving book entry</string>
+    <string name="add_success_msg">Book saved</string>
+    <string name="update_error_msg">Error updating book</string>
+    <string name="update_success_msg">Book updated</string>
+    <string name="delete_error_msg">Error deleting book</string>
+    <string name="delete_success_msg">Book deleted</string>
+    <string name="neg_quantity_error_msg">Can\'t accept negative quantity.</string>
+
+    <!-- EditActivity sanity check Toast messages -->
+    <string name="include_name_msg">Please include a book name.</string>
+    <string name="include_author_msg">Please include an author.</string>
+    <string name="include_price_msg">Please include a price.</string>
+    <string name="include_quantity_msg">Please include a quantity.</string>
+    <string name="include_supplier_name_msg">Please include a supplier name.</string>
+    <string name="include_phone_msg">Please include a phone number.</string>
+    <string name="include_valid_phone_msg">Please include a valid phone number.</string>
+
+    <!-- Empty State text -->
+    <string name="empty_state_text">Your library is empty!\nAdd some books.</string>
+
+    <!-- Dialog message text -->
+    <string name="delete_book_dialog_msg">Delete this book?</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_all_dialog_msg">Delete all books?</string>
+    <string name="discard_dialog_msg">Discard your changes and quit editing?</string>
+    <string name="discard">Discard</string>
+    <string name="keep_editing">Keep Editing</string>
 </resources>

@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/activity_margin"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="@dimen/activity_margin">
 
     <TextView
         android:id="@+id/book_info"
@@ -17,16 +17,63 @@
         android:inputType="textCapSentences" />
 
     <EditText
-        android:id="@+id/edit_book_price"
+        android:id="@+id/edit_book_author"
         style="@style/EditText"
-        android:hint="@string/book_price_hint"
-        android:inputType="number" />
+        android:hint="@string/book_author_hint"
+        android:inputType="textCapWords" />
 
-    <EditText
-        android:id="@+id/edit_book_quantity"
-        style="@style/EditText"
-        android:hint="@string/book_quantity_hint"
-        android:inputType="number" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/EditActivityTitles"
+            android:text="@string/dollar_sign" />
+
+        <EditText
+            android:id="@+id/edit_book_price"
+            style="@style/EditText"
+            android:hint="@string/book_price_hint"
+            android:inputType="numberDecimal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/decrease_quantity"
+            style="?android:buttonBarButtonStyle"
+            android:textColor="@android:color/holo_red_light"
+            android:layout_width="@dimen/quantity_button_width_height"
+            android:layout_height="@dimen/quantity_button_width_height"
+            android:text="@string/decrease_quantity" />
+
+        <Button
+            android:id="@+id/increase_quantity"
+            style="?android:buttonBarButtonStyle"
+            android:layout_width="@dimen/quantity_button_width_height"
+            android:layout_height="@dimen/quantity_button_width_height"
+            android:text="@string/increase_quantity" />
+
+        <EditText
+            android:id="@+id/edit_book_quantity"
+            style="@style/EditText"
+            android:hint="@string/book_quantity_hint"
+            android:inputType="number" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_eight"
+            android:layout_marginStart="@dimen/margin_eight"
+            android:layout_marginTop="@dimen/margin_four"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/stock_text_view"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/supplier_info"
@@ -44,5 +91,6 @@
         android:id="@+id/edit_book_supplier_phone"
         style="@style/EditText"
         android:hint="@string/supplier_phone_hint"
-        android:inputType="phone" />
+        android:inputType="phone"
+        android:maxLength="10" />
 </LinearLayout>
