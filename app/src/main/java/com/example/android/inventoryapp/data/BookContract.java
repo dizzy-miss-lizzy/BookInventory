@@ -7,7 +7,7 @@ import android.provider.BaseColumns;
 /**
  * Contract class used to define the schema of the database.
  */
-public class BookContract {
+public final class BookContract {
 
     /** Private constructor to prevent instantiating the class **/
     private BookContract() {}
@@ -38,9 +38,6 @@ public class BookContract {
 
         /** Name of database table **/
         public static final String TABLE_NAME = "books";
-
-        /** ID number used only by the database table - INTEGER **/
-        public static final String _ID = BaseColumns._ID;
 
         /** Name of book - TEXT **/
         public static final String COLUMN_BOOK_NAME = "name";

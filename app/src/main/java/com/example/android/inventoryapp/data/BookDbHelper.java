@@ -3,7 +3,6 @@ package com.example.android.inventoryapp.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import static com.example.android.inventoryapp.data.BookContract.BookEntry;
 
@@ -12,9 +11,6 @@ import static com.example.android.inventoryapp.data.BookContract.BookEntry;
  * managing the version number, and specifying data types and keywords for each column.
  */
 public class BookDbHelper extends SQLiteOpenHelper {
-
-    /** Log messages tag **/
-    public static final String LOG_TAG = BookDbHelper.class.getSimpleName();
 
     /** Database file name **/
     public static final String DATABASE_NAME = "BookStore.db";
@@ -49,7 +45,6 @@ public class BookDbHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.i(LOG_TAG, "Database is created.");
         db.execSQL(SQL_CREATE_BOOKS_TABLE);
     }
 
@@ -58,7 +53,6 @@ public class BookDbHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.i(LOG_TAG, "Database is deleted.");
         db.execSQL(SQL_DELETE_BOOKS_TABLE);
         onCreate(db);
     }

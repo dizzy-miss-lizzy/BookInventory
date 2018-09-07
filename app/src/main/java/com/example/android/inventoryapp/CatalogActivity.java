@@ -13,7 +13,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,9 +32,6 @@ import static com.example.android.inventoryapp.data.BookContract.BookEntry.CONTE
  * Material icons: https://material.io/tools/icons/?style=baseline
  */
 public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-
-    /** Log messages tag **/
-    public static final String LOG_TAG = CatalogActivity.class.getName();
 
     /** Adapter for the list of books **/
     BookCursorAdapter mCursorAdapter;
@@ -185,7 +181,6 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
      */
     private void deleteAllBooks() {
         int rowsDeleted = getContentResolver().delete(BookEntry.CONTENT_URI, null, null);
-        Log.v(LOG_TAG, rowsDeleted + " rows deleted from the books database.");
     }
 
     /**
